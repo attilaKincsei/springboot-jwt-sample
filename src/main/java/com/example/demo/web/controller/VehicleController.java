@@ -1,7 +1,9 @@
-package com.example.demo.web;
+package com.example.demo.web.controller;
 
-import com.example.demo.domain.Vehicle;
+import com.example.demo.model.Vehicle;
 import com.example.demo.repository.VehicleRepository;
+import com.example.demo.web.model.VehicleForm;
+import com.example.demo.web.errors.VehicleNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -13,7 +15,7 @@ import static org.springframework.http.ResponseEntity.noContent;
 import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
-@RequestMapping("/v1/vehicles")
+@RequestMapping("/vehicles")
 public class VehicleController {
 
     private VehicleRepository vehicles;

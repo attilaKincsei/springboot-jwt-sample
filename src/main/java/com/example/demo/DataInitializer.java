@@ -1,7 +1,7 @@
 package com.example.demo;
 
-import com.example.demo.domain.User;
-import com.example.demo.domain.Vehicle;
+import com.example.demo.model.User;
+import com.example.demo.model.Vehicle;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.repository.VehicleRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +27,7 @@ public class DataInitializer implements CommandLineRunner {
     PasswordEncoder passwordEncoder;
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
         log.debug("initializing vehicles data...");
         Arrays.asList("moto", "car").forEach(v -> this.vehicles.saveAndFlush(Vehicle.builder().name(v).build()));
 
