@@ -9,9 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import static java.util.stream.Collectors.toList;
-import static org.springframework.http.ResponseEntity.ok;
+import java.util.stream.Collectors;
 
 @RestController()
 public class UserinfoController {
@@ -23,8 +21,8 @@ public class UserinfoController {
         model.put("roles", userDetails.getAuthorities()
             .stream()
             .map(a -> ((GrantedAuthority) a).getAuthority())
-            .collect(toList())
+            .collect(Collectors.toList())
         );
-        return ok(model);
+        return ResponseEntity.ok(model);
     }
 }

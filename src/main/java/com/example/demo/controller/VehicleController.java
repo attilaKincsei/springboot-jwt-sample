@@ -10,10 +10,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 
-import static org.springframework.http.ResponseEntity.created;
-import static org.springframework.http.ResponseEntity.noContent;
-import static org.springframework.http.ResponseEntity.ok;
-
 @RestController
 @RequestMapping("/vehicles")
 public class VehicleController {
@@ -27,13 +23,13 @@ public class VehicleController {
 
     @GetMapping("")
     public ResponseEntity all() {
-        return ok(this.vehicles.findAll());
+        return ResponseEntity.ok(this.vehicles.findAll());
     }
 
     @PostMapping("")
     public ResponseEntity save(@RequestBody VehicleForm form, HttpServletRequest request) {
         Vehicle saved = this.vehicles.save(Vehicle.builder().name(form.getName()).build());
-        return created(
+        return ResponseEntity.created(
             ServletUriComponentsBuilder
                 .fromContextPath(request)
                 .path("/v1/vehicles/{id}")
@@ -44,7 +40,7 @@ public class VehicleController {
 
     @GetMapping("/{id}")
     public ResponseEntity get(@PathVariable("id") Long id) {
-        return ok(this.vehicles.findById(id).orElseThrow(() -> new VehicleNotFoundException()));
+        return ResponseEntity.ok(this.vehicles.findById(id).orElseThrow(() -> new VehicleNotFoundException()));
     }
 
 
@@ -54,13 +50,13 @@ public class VehicleController {
         existed.setName(form.getName());
 
         this.vehicles.save(existed);
-        return noContent().build();
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity delete(@PathVariable("id") Long id) {
         Vehicle existed = this.vehicles.findById(id).orElseThrow(() -> new VehicleNotFoundException());
         this.vehicles.delete(existed);
-        return noContent().build();
+        return ResponseEntity.noContent().build();
     }
 }
