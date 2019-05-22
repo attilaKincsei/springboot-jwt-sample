@@ -1,9 +1,9 @@
-package com.example.demo.web.controller;
+package com.example.demo.controller;
 
 import com.example.demo.model.Vehicle;
 import com.example.demo.repository.VehicleRepository;
-import com.example.demo.web.model.VehicleForm;
-import com.example.demo.web.errors.VehicleNotFoundException;
+import com.example.demo.model.VehicleForm;
+import com.example.demo.errors.VehicleNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;

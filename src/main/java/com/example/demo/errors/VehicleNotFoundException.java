@@ -1,4 +1,4 @@
-package com.example.demo.web.errors;
+package com.example.demo.errors;
 
 public class VehicleNotFoundException extends RuntimeException {
 

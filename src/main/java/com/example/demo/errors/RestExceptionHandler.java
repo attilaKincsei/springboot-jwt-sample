@@ -1,6 +1,5 @@
-package com.example.demo.web.errors;
+package com.example.demo.errors;
 
-import com.example.demo.security.jwt.InvalidJwtAuthenticationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
