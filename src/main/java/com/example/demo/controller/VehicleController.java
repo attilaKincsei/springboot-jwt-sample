@@ -20,7 +20,6 @@ public class VehicleController {
         this.vehicles = vehicles;
     }
 
-
     @GetMapping("")
     public ResponseEntity all() {
         return ResponseEntity.ok(this.vehicles.findAll());

@@ -17,19 +17,22 @@ import java.util.Arrays;
 @Slf4j
 public class DataInitializer implements CommandLineRunner {
 
-    @Autowired
-    VehicleRepository vehicles;
+    private final VehicleRepository vehicles;
 
-    @Autowired
-    UserRepository users;
+    private final UserRepository users;
 
-    @Autowired
-    PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
+
+    public DataInitializer(VehicleRepository vehicles, UserRepository users, PasswordEncoder passwordEncoder) {
+        this.vehicles = vehicles;
+        this.users = users;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Override
     public void run(String... args) {
-        log.debug("initializing vehicles data...");
-        Arrays.asList("moto", "car").forEach(v -> this.vehicles.saveAndFlush(Vehicle.builder().name(v).build()));
+        log.debug("initializing vehicle data...");
+        Arrays.asList("motor", "car", "truck").forEach(v -> this.vehicles.saveAndFlush(Vehicle.builder().name(v).build()));
 
         log.debug("printing all vehicles...");
         this.vehicles.findAll().forEach(v -> log.debug(" Vehicle :" + v.toString()));
