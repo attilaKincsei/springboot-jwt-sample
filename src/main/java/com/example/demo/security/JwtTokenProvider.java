@@ -1,8 +1,7 @@
 package com.example.demo.security;
 
-import com.example.demo.errors.InvalidJwtAuthenticationException;
 import io.jsonwebtoken.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -17,6 +16,7 @@ import java.util.Date;
 import java.util.List;
 
 @Component
+@Slf4j
 public class JwtTokenProvider {
 
     @Value("${security.jwt.token.secret-key:secret}")
@@ -62,7 +62,7 @@ public class JwtTokenProvider {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
     }
 
-    String resolveToken(HttpServletRequest req) {
+    String getTokenFromHeader(HttpServletRequest req) {
         String bearerToken = req.getHeader("Authorization");
         if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7, bearerToken.length());
@@ -70,6 +70,7 @@ public class JwtTokenProvider {
         return null;
     }
 
+    // checks if the token is valid and not expired.
     boolean validateToken(String token) {
         try {
             Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
@@ -78,8 +79,8 @@ public class JwtTokenProvider {
             }
             return true;
         } catch (JwtException | IllegalArgumentException e) {
-            throw new InvalidJwtAuthenticationException("Expired or invalid JWT token");
         }
+        return false;
     }
 
 }

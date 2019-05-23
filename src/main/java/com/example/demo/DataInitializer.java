@@ -5,9 +5,9 @@ import com.example.demo.model.Vehicle;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.repository.VehicleRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -23,15 +23,15 @@ public class DataInitializer implements CommandLineRunner {
 
     private final PasswordEncoder passwordEncoder;
 
-    public DataInitializer(VehicleRepository vehicles, UserRepository users, PasswordEncoder passwordEncoder) {
+    public DataInitializer(VehicleRepository vehicles, UserRepository users) {
         this.vehicles = vehicles;
         this.users = users;
-        this.passwordEncoder = passwordEncoder;
+        this.passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
     @Override
     public void run(String... args) {
-        log.debug("initializing vehicle data...");
+        log.debug("initializing sample data...");
         Arrays.asList("motor", "car", "truck").forEach(v -> this.vehicles.saveAndFlush(Vehicle.builder().name(v).build()));
 
         log.debug("printing all vehicles...");

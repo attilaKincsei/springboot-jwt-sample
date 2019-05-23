@@ -39,13 +39,13 @@ public class VehicleController {
 
     @GetMapping("/{id}")
     public ResponseEntity get(@PathVariable("id") Long id) {
-        return ResponseEntity.ok(this.vehicles.findById(id).orElseThrow(() -> new VehicleNotFoundException()));
+        return ResponseEntity.ok(this.vehicles.findById(id).orElseThrow(VehicleNotFoundException::new));
     }
 
 
     @PutMapping("/{id}")
     public ResponseEntity update(@PathVariable("id") Long id, @RequestBody VehicleForm form) {
-        Vehicle existed = this.vehicles.findById(id).orElseThrow(() -> new VehicleNotFoundException());
+        Vehicle existed = this.vehicles.findById(id).orElseThrow(VehicleNotFoundException::new);
         existed.setName(form.getName());
 
         this.vehicles.save(existed);
@@ -54,7 +54,7 @@ public class VehicleController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity delete(@PathVariable("id") Long id) {
-        Vehicle existed = this.vehicles.findById(id).orElseThrow(() -> new VehicleNotFoundException());
+        Vehicle existed = this.vehicles.findById(id).orElseThrow(VehicleNotFoundException::new);
         this.vehicles.delete(existed);
         return ResponseEntity.noContent().build();
     }
