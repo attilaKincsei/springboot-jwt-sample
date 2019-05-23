@@ -7,6 +7,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -53,12 +54,12 @@ public class JwtTokenProvider {
             .compact();
     }
 
-    Authentication getAuthentication(String token) {
-        UserDetails userDetails = this.userDetailsService.loadUserByUsername(getUsername(token));
+    Authentication loadUserFromTokenInfo(String token) throws UsernameNotFoundException {
+        UserDetails userDetails = this.userDetailsService.loadUserByUsername(getUsernameFromToken(token));
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 
-    private String getUsername(String token) {
+    private String getUsernameFromToken(String token) {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
     }
 
