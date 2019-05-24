@@ -18,7 +18,7 @@ import java.util.List;
 
 @Component
 @Slf4j
-public class JwtTokenProvider {
+public class JwtTokenServices {
 
     @Value("${security.jwt.token.secret-key:secret}")
     private String secretKey = "secret";
@@ -29,7 +29,7 @@ public class JwtTokenProvider {
     private final UserDetailsService userDetailsService;
 
     // Note: IntelliJ wrongly marks userDetailsService as an error
-    public JwtTokenProvider(UserDetailsService userDetailsService) {
+    public JwtTokenServices(UserDetailsService userDetailsService) {
         this.userDetailsService = userDetailsService;
     }
 
@@ -54,16 +54,7 @@ public class JwtTokenProvider {
             .compact();
     }
 
-    Authentication loadUserFromTokenInfo(String token) throws UsernameNotFoundException {
-        UserDetails userDetails = this.userDetailsService.loadUserByUsername(getUsernameFromToken(token));
-        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
-    }
-
-    private String getUsernameFromToken(String token) {
-        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
-    }
-
-    String getTokenFromHeader(HttpServletRequest req) {
+    String getTokenFromRequest(HttpServletRequest req) {
         String bearerToken = req.getHeader("Authorization");
         if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7, bearerToken.length());
@@ -80,8 +71,19 @@ public class JwtTokenProvider {
             }
             return true;
         } catch (JwtException | IllegalArgumentException e) {
+            log.debug("JWT token invalid " + e);
         }
         return false;
     }
+
+    Authentication loadUserFromTokenInfo(String token) throws UsernameNotFoundException {
+        UserDetails userDetails = this.userDetailsService.loadUserByUsername(getUsernameFromToken(token));
+        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+    }
+
+    private String getUsernameFromToken(String token) {
+        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
+    }
+
 
 }

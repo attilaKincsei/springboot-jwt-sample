@@ -14,21 +14,22 @@ import java.io.IOException;
 // Our custom filter that validated the JWT tokens.
 public class JwtTokenFilter extends GenericFilterBean {
 
-    private JwtTokenProvider jwtTokenProvider;
+    private JwtTokenServices jwtTokenServices;
 
-    JwtTokenFilter(JwtTokenProvider jwtTokenProvider) {
-        this.jwtTokenProvider = jwtTokenProvider;
+    JwtTokenFilter(JwtTokenServices jwtTokenServices) {
+        this.jwtTokenServices = jwtTokenServices;
     }
 
     // this is called for every request that comes in (unless its filtered out before in the chain)
     @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain filterChain) throws IOException, ServletException {
-        String token = jwtTokenProvider.getTokenFromHeader((HttpServletRequest) req);
+        String token = jwtTokenServices.getTokenFromRequest((HttpServletRequest) req);
         // If we have a token validate it.
-        if (token != null && jwtTokenProvider.validateToken(token)) {
-            Authentication auth = jwtTokenProvider.loadUserFromTokenInfo(token);
+        if (token != null && jwtTokenServices.validateToken(token)) {
+            Authentication auth = jwtTokenServices.loadUserFromTokenInfo(token);
             if (auth != null) {
-                // marks the user as authenticated.
+                // Marks the user as authenticated.
+                // If this code does not run, the request can fail on a later filter.
                 SecurityContextHolder.getContext().setAuthentication(auth);
             }
         }

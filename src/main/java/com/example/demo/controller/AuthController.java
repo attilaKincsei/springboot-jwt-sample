@@ -1,9 +1,8 @@
 package com.example.demo.controller;
 
 import com.example.demo.repository.UserRepository;
-import com.example.demo.security.JwtTokenProvider;
+import com.example.demo.security.JwtTokenServices;
 import com.example.demo.model.AuthenticationRequest;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -25,13 +24,13 @@ public class AuthController {
 
     private final AuthenticationManager authenticationManager;
 
-    private final JwtTokenProvider jwtTokenProvider;
+    private final JwtTokenServices jwtTokenServices;
 
     private final UserRepository users;
 
-    public AuthController(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, UserRepository users) {
+    public AuthController(AuthenticationManager authenticationManager, JwtTokenServices jwtTokenServices, UserRepository users) {
         this.authenticationManager = authenticationManager;
-        this.jwtTokenProvider = jwtTokenProvider;
+        this.jwtTokenServices = jwtTokenServices;
         this.users = users;
     }
 
@@ -42,7 +41,7 @@ public class AuthController {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, data.getPassword()));
             List<String> roles = this.users.findByUsername(username).orElseThrow(() ->
                     new UsernameNotFoundException("Username " + username + "not found")).getRoles();
-            String token = jwtTokenProvider.createToken(username, roles);
+            String token = jwtTokenServices.createToken(username, roles);
 
             Map<Object, Object> model = new HashMap<>();
             model.put("username", username);

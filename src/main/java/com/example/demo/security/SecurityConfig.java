@@ -1,8 +1,5 @@
 package com.example.demo.security;
 
-import com.example.demo.security.JwtTokenFilter;
-import com.example.demo.security.JwtTokenProvider;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -20,10 +17,10 @@ we need to override this with our configuration.
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final JwtTokenProvider jwtTokenProvider;
+    private final JwtTokenServices jwtTokenServices;
 
-    public SecurityConfig(JwtTokenProvider jwtTokenProvider) {
-        this.jwtTokenProvider = jwtTokenProvider;
+    public SecurityConfig(JwtTokenServices jwtTokenServices) {
+        this.jwtTokenServices = jwtTokenServices;
     }
 
     // By overriding this function and
@@ -49,11 +46,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/auth/signin").permitAll() // allowed by anyone
                 .antMatchers(HttpMethod.GET, "/vehicles/**").authenticated() // allowed only when signed in
                 .antMatchers(HttpMethod.DELETE, "/vehicles/**").hasRole("ADMIN") // allowed if signed in with ADMIN role
-                .antMatchers(HttpMethod.GET, "/me").authenticated() // allowed if signed in with ADMIN role
+                .antMatchers(HttpMethod.GET, "/me").authenticated() // allowed only if signed in
                 .anyRequest().denyAll() // anything else is denied; this is a safeguard in case we left something out.
             .and()
             // Here we define our custom filter that uses the JWT tokens for authentication.
-            .addFilterBefore(new JwtTokenFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
+            .addFilterBefore(new JwtTokenFilter(jwtTokenServices), UsernamePasswordAuthenticationFilter.class);
     }
 }
 
