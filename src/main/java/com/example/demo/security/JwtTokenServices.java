@@ -38,6 +38,7 @@ public class JwtTokenServices {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
 
+    // Creates a JWT token
     public String createToken(String username, List<String> roles) {
         // Add a custom field to the token
         Claims claims = Jwts.claims().setSubject(username);
@@ -84,6 +85,5 @@ public class JwtTokenServices {
     private String getUsernameFromToken(String token) {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
     }
-
 
 }

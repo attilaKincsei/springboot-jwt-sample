@@ -2,7 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.repository.UserRepository;
 import com.example.demo.security.JwtTokenServices;
-import com.example.demo.model.AuthenticationRequest;
+import com.example.demo.model.UserCredentials;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -35,7 +35,7 @@ public class AuthController {
     }
 
     @PostMapping("/signin")
-    public ResponseEntity signin(@RequestBody AuthenticationRequest data) {
+    public ResponseEntity signin(@RequestBody UserCredentials data) {
         try {
             String username = data.getUsername();
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, data.getPassword()));
@@ -45,6 +45,7 @@ public class AuthController {
 
             Map<Object, Object> model = new HashMap<>();
             model.put("username", username);
+            model.put("roles", roles);
             model.put("token", token);
             return ResponseEntity.ok(model);
         } catch (AuthenticationException e) {
