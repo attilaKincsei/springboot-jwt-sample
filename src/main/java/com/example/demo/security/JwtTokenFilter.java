@@ -24,14 +24,11 @@ public class JwtTokenFilter extends GenericFilterBean {
     @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain filterChain) throws IOException, ServletException {
         String token = jwtTokenServices.getTokenFromRequest((HttpServletRequest) req);
-        // If we have a token validate it.
         if (token != null && jwtTokenServices.validateToken(token)) {
-            Authentication auth = jwtTokenServices.loadUserFromTokenInfo(token);
-            if (auth != null) {
-                // Marks the user as authenticated.
-                // If this code does not run, the request can fail on a later filter.
-                SecurityContextHolder.getContext().setAuthentication(auth);
-            }
+            Authentication auth = jwtTokenServices.parseUserFromTokenInfo(token);
+            // Marks the user as authenticated.
+            // If this code does not run, the request will fail for routes that are configured to need authentication
+            SecurityContextHolder.getContext().setAuthentication(auth);
         }
         // process the next filter.
         filterChain.doFilter(req, res);
