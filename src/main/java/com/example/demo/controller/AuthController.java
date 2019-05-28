@@ -39,7 +39,7 @@ public class AuthController {
         try {
             String username = data.getUsername();
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, data.getPassword()));
-            List<String> roles = this.users.findByUsername(username).orElseThrow(() ->
+            List<String> roles = users.findByUsername(username).orElseThrow(() ->
                     new UsernameNotFoundException("Username " + username + "not found")).getRoles();
             String token = jwtTokenServices.createToken(username, roles);
 

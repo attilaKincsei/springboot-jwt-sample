@@ -78,7 +78,7 @@ public class JwtTokenServices {
     }
 
     Authentication loadUserFromTokenInfo(String token) throws UsernameNotFoundException {
-        UserDetails userDetails = this.userDetailsService.loadUserByUsername(getUsernameFromToken(token));
+        UserDetails userDetails = userDetailsService.loadUserByUsername(getUsernameFromToken(token));
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 
