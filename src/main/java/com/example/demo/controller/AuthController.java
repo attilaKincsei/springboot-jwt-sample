@@ -29,12 +29,9 @@ public class AuthController {
 
     private final JwtTokenServices jwtTokenServices;
 
-    private final UserRepository users;
-
     public AuthController(AuthenticationManager authenticationManager, JwtTokenServices jwtTokenServices, UserRepository users) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenServices = jwtTokenServices;
-        this.users = users;
     }
 
     @PostMapping("/signin")

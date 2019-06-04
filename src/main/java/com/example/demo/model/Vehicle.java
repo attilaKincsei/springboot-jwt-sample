@@ -20,9 +20,6 @@ public class Vehicle implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @Version
-    private Long version;
-
     @Column
     private String name;
 
