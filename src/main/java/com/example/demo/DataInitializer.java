@@ -1,6 +1,6 @@
 package com.example.demo;
 
-import com.example.demo.model.User;
+import com.example.demo.model.VehicleAppUser;
 import com.example.demo.model.Vehicle;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.repository.VehicleRepository;
@@ -37,20 +37,20 @@ public class DataInitializer implements CommandLineRunner {
         log.debug("printing all vehicles...");
         vehicles.findAll().forEach(v -> log.debug(" Vehicle :" + v.toString()));
 
-        users.save(User.builder()
+        users.save(VehicleAppUser.builder()
             .username("user")
             .password(passwordEncoder.encode("password"))
             .roles(Arrays.asList("ROLE_USER"))
             .build()
         );
 
-        users.save(User.builder()
+        users.save(VehicleAppUser.builder()
             .username("admin")
             .password(passwordEncoder.encode("password"))
             .roles(Arrays.asList("ROLE_USER", "ROLE_ADMIN"))
             .build()
         );
         log.debug("printing all users...");
-        users.findAll().forEach(v -> log.debug(" User :" + v.toString()));
+        users.findAll().forEach(v -> log.debug(" VehicleAppUser :" + v.toString()));
     }
 }
